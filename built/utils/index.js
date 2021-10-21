@@ -40,17 +40,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.downloadImg = void 0;
-var path_1 = __importDefault(require("path"));
 /*
  * @Author: jiangjin
  * @Date: 2021-10-21 15:39:28
- * @LastEditTime: 2021-10-21 16:13:37
+ * @LastEditTime: 2021-10-21 17:54:37
  * @LastEditors: jiangjin
  * @Description:
  *
  */
-var fs = require('fs');
-var request = require('request');
+var node_fs_1 = require("node:fs");
+var node_http_1 = require("node:http");
+var node_path_1 = __importDefault(require("node:path"));
 var imgCounter = 0;
 function downloadImg(imgs, targetPath) {
     return __awaiter(this, void 0, void 0, function () {
@@ -73,9 +73,9 @@ function downloadImg(imgs, targetPath) {
                                 case 1:
                                     _b.sent();
                                     filename = src.split('/').pop();
-                                    targetFile = path_1.default.join(targetPath, filename === null || filename === void 0 ? void 0 : filename.toLowerCase());
-                                    writeStream = fs.createWriteStream(targetFile);
-                                    readStream = request(src);
+                                    targetFile = node_path_1.default.join(targetPath, filename === null || filename === void 0 ? void 0 : filename.toLowerCase());
+                                    writeStream = node_fs_1.createWriteStream(targetFile);
+                                    readStream = node_http_1.request(src);
                                     readStream.pipe(writeStream);
                                     readStream.on('end', function () {
                                         console.log("\u6587\u4EF6\u4E0B\u8F7D\u6210\u529F");

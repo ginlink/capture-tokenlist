@@ -1,15 +1,14 @@
-import path from 'path'
-
 /*
  * @Author: jiangjin
  * @Date: 2021-10-21 15:39:28
- * @LastEditTime: 2021-10-21 16:13:37
+ * @LastEditTime: 2021-10-21 17:54:37
  * @LastEditors: jiangjin
  * @Description:
  *
  */
-const fs = require('fs')
-const request = require('request')
+import { createWriteStream } from 'node:fs'
+import { request } from 'node:http'
+import path from 'node:path'
 let imgCounter = 0
 
 export async function downloadImg(imgs: string[], targetPath: string) {
@@ -26,7 +25,7 @@ export async function downloadImg(imgs: string[], targetPath: string) {
 
     const filename = src.split('/').pop()
     const targetFile = path.join(targetPath, filename?.toLowerCase())
-    var writeStream = fs.createWriteStream(targetFile)
+    var writeStream = createWriteStream(targetFile)
 
     var readStream = request(src)
     readStream.pipe(writeStream)

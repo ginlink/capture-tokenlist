@@ -2,7 +2,7 @@
 /*
  * @Author: jiangjin
  * @Date: 2021-10-21 14:52:52
- * @LastEditTime: 2021-10-21 16:46:43
+ * @LastEditTime: 2021-10-21 17:54:51
  * @LastEditors: jiangjin
  * @Description:
  *
@@ -43,33 +43,92 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var path = require("path");
 var api_1 = require("./services/api");
 var parseUrls_1 = require("./utils/parseUrls");
 var utils_1 = require("./utils");
 var file_1 = require("./utils/file");
+var promises_1 = require("fs/promises");
+var node_path_1 = __importDefault(require("node:path"));
 ;
 (function main() {
     return __awaiter(this, void 0, void 0, function () {
-        var tokenListData, tokenList, parsedUrls, targetPath;
+        function capatureTokenList() {
+            return __awaiter(this, void 0, void 0, function () {
+                var tokenListData, tokenList, parsedUrls, targetPath;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, api_1.getTokenList()];
+                        case 1:
+                            tokenListData = (_a.sent());
+                            tokenList = tokenListData.tokens;
+                            parsedUrls = parseUrls_1.parseUrls(tokenList);
+                            targetPath = node_path_1.default.resolve(__dirname, "./images/images");
+                            return [4 /*yield*/, file_1.checkAndMkdir(targetPath, true)
+                                //download and save to path
+                            ];
+                        case 2:
+                            _a.sent();
+                            //download and save to path
+                            return [4 /*yield*/, utils_1.downloadImg(parsedUrls, targetPath)];
+                        case 3:
+                            //download and save to path
+                            _a.sent();
+                            return [2 /*return*/];
+                    }
+                });
+            });
+        }
+        function renameLower(filepath) {
+            return __awaiter(this, void 0, void 0, function () {
+                var addresses, len, i, address, o, n, err_1;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, file_1.filterUpperAddress(filepath)
+                            // const addresses = await filterLowerAddress(filepath)
+                        ];
+                        case 1:
+                            addresses = _a.sent();
+                            // const addresses = await filterLowerAddress(filepath)
+                            console.log('[](addresses):', addresses);
+                            len = addresses.length;
+                            i = 0;
+                            _a.label = 2;
+                        case 2:
+                            if (!(i < len)) return [3 /*break*/, 7];
+                            address = addresses[i];
+                            o = node_path_1.default.join(filepath, address);
+                            n = node_path_1.default.join(filepath, address.toLowerCase());
+                            _a.label = 3;
+                        case 3:
+                            _a.trys.push([3, 5, , 6]);
+                            return [4 /*yield*/, promises_1.rename(o, n)];
+                        case 4:
+                            _a.sent();
+                            console.log('[](命名成功):', address + "=>" + address.toLowerCase(), "\u5F53\u524D\u7B2C " + i + " / " + len);
+                            return [3 /*break*/, 6];
+                        case 5:
+                            err_1 = _a.sent();
+                            console.log('[renameLower](err):', err_1);
+                            return [3 /*break*/, 6];
+                        case 6:
+                            ++i;
+                            return [3 /*break*/, 2];
+                        case 7: return [2 /*return*/];
+                    }
+                });
+            });
+        }
+        var filepath;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, api_1.getTokenList()];
+                case 0:
+                    filepath = node_path_1.default.resolve(__dirname, './images');
+                    return [4 /*yield*/, renameLower(filepath)];
                 case 1:
-                    tokenListData = (_a.sent());
-                    tokenList = tokenListData.tokens;
-                    parsedUrls = parseUrls_1.parseUrls(tokenList);
-                    targetPath = path.resolve(__dirname, "./images/images");
-                    return [4 /*yield*/, file_1.checkAndMkdir(targetPath, true)
-                        //download and save to path
-                    ];
-                case 2:
-                    _a.sent();
-                    //download and save to path
-                    return [4 /*yield*/, utils_1.downloadImg(parsedUrls, targetPath)];
-                case 3:
-                    //download and save to path
                     _a.sent();
                     return [2 /*return*/];
             }

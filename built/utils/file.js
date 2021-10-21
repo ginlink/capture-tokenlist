@@ -2,7 +2,7 @@
 /*
  * @Author: jiangjin
  * @Date: 2021-10-21 16:27:44
- * @LastEditTime: 2021-10-21 16:44:07
+ * @LastEditTime: 2021-10-21 17:53:20
  * @LastEditors: jiangjin
  * @Description:
  *
@@ -43,8 +43,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __asyncValues = (this && this.__asyncValues) || function (o) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var m = o[Symbol.asyncIterator], i;
+    return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
+    function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
+    function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkAndMkdir = exports.mkdir = exports.pathExist = void 0;
+exports.filterAddress = exports.filterLowerAddress = exports.filterUpperAddress = exports.checkAndMkdir = exports.mkdir = exports.pathExist = void 0;
 var fs_1 = require("fs");
 var promises_1 = require("fs/promises");
 // export function isFileExisted(path_way) {
@@ -83,3 +90,78 @@ function checkAndMkdir(path, recursive) {
     });
 }
 exports.checkAndMkdir = checkAndMkdir;
+function filterUpperAddress(filepath) {
+    return __awaiter(this, void 0, void 0, function () {
+        var upperReg;
+        return __generator(this, function (_a) {
+            upperReg = /^[0-9a-z\.]+$/;
+            return [2 /*return*/, filterAddress(filepath, upperReg)];
+        });
+    });
+}
+exports.filterUpperAddress = filterUpperAddress;
+function filterLowerAddress(filepath) {
+    return __awaiter(this, void 0, void 0, function () {
+        var lowerReg;
+        return __generator(this, function (_a) {
+            lowerReg = /^[0-9A-Z\.]+$/;
+            return [2 /*return*/, filterAddress(filepath, lowerReg)];
+        });
+    });
+}
+exports.filterLowerAddress = filterLowerAddress;
+function filterAddress(filepath, reg) {
+    var e_1, _a;
+    return __awaiter(this, void 0, void 0, function () {
+        var dir, upperAddresses, dir_1, dir_1_1, dirent, e_1_1, err_1;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    _b.trys.push([0, 14, , 15]);
+                    return [4 /*yield*/, promises_1.opendir(filepath)];
+                case 1:
+                    dir = _b.sent();
+                    upperAddresses = [];
+                    _b.label = 2;
+                case 2:
+                    _b.trys.push([2, 7, 8, 13]);
+                    dir_1 = __asyncValues(dir);
+                    _b.label = 3;
+                case 3: return [4 /*yield*/, dir_1.next()];
+                case 4:
+                    if (!(dir_1_1 = _b.sent(), !dir_1_1.done)) return [3 /*break*/, 6];
+                    dirent = dir_1_1.value;
+                    if (!reg.test(dirent.name)) {
+                        // console.log(dirent.name)
+                        upperAddresses.push(dirent.name);
+                    }
+                    _b.label = 5;
+                case 5: return [3 /*break*/, 3];
+                case 6: return [3 /*break*/, 13];
+                case 7:
+                    e_1_1 = _b.sent();
+                    e_1 = { error: e_1_1 };
+                    return [3 /*break*/, 13];
+                case 8:
+                    _b.trys.push([8, , 11, 12]);
+                    if (!(dir_1_1 && !dir_1_1.done && (_a = dir_1.return))) return [3 /*break*/, 10];
+                    return [4 /*yield*/, _a.call(dir_1)];
+                case 9:
+                    _b.sent();
+                    _b.label = 10;
+                case 10: return [3 /*break*/, 12];
+                case 11:
+                    if (e_1) throw e_1.error;
+                    return [7 /*endfinally*/];
+                case 12: return [7 /*endfinally*/];
+                case 13: return [2 /*return*/, upperAddresses];
+                case 14:
+                    err_1 = _b.sent();
+                    console.error(err_1);
+                    return [2 /*return*/, undefined];
+                case 15: return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.filterAddress = filterAddress;
